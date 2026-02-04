@@ -7,4 +7,4 @@ def fibosum(n):
         i += 1
     return lst
 print("Sum of fibonaccy sequence of the firt 5th terms is :",sum(fibosum(6)))
-print("Sum of fibonaccy sequence of the firt 10th  terms is :",sum(fibosum(6)))
+print("Sum of fibonaccy sequence of the firt 10th  terms is :",sum(fibosum(11)))
