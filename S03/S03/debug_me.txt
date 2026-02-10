@@ -1,0 +1,2 @@
+there is a zero division error when t1 = 0 which hapends when :
+c = d when c,d = 3
