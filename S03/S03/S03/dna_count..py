@@ -1,10 +1,12 @@
-def count(seq):
-    print("total lenth of the sequence is : ", len(seq))
-    print("Number of adenine bases:" ,seq.count("A"))
-    print("Number of guanine bases:" ,seq.count("G"))
-    print("Number of citosine bases:" ,seq.count("C"))
-    print("Number of timine bases:" ,seq.count("T"))
-
-seq = input('Enter a DNA sequence: ')
+seq = input("Enter the sequence: ")
 seq = seq.upper()
-count(seq)
+print("Total lenth : ", len(seq))
+
+bases =  {"A": 0 , "C": 0, "G": 0, "T": 0}
+
+for base in seq:
+    if base in bases:
+        bases[base] += 1
+
+for base, count in bases.items():
+    print(f"{base}: {count}")
