@@ -1,2 +1,8 @@
-there is a zero division error when t1 = 0 which hapends when :
+there is a zero division error when t1 = 0 which happens when :
 c = d when c,d = 3
+The error is located in line 11. Its type is ZeroDivisionError , and its caused when value of t1 is 0.
+This will happen when parameter c and d are equal.
+results 1 , 3 and 4 are properly computed.
+
+line 11 : t3 = 2 * (t0 / t1)
+
