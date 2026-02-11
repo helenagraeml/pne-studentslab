@@ -10,4 +10,4 @@ def classify_triangle(a, b, c):
 a = int(input("enter the first length: "))
 b = int(input("enter the second length: "))
 c = int(input("enter the third length: "))
-print(classify_triangle(a, b, c))
+print(f"classify_triangle({a}, {b}, {c}) =", classify_triangle(a, b, c))
