@@ -1,7 +1,6 @@
-#lines = ["AGTACACTGGT", "ACCAGTGTACT","ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG" ]
-
-#print("From variable:", lines)
 from dna_count import count_bases
+
+if __name__ == "__main__":
 
 # WAY 1
 f = open ("dna.txt", "r")
@@ -16,12 +15,11 @@ with open( "dna.txt", "r") as f:
 
 total_number = 0
 bases =  {"A": 0 , "C": 0, "G": 0, "T": 0}
-for sequence in lines:
-    sequence = sequence.strip()
+for seq in lines:
+    seq = seq.strip()
 
-    total_number += len(sequence)
-
-    for base in sequence:
+    total_number += len(seq)
+    for base in seq:
         if base in bases:
             bases[base] += 1
 
