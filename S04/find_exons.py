@@ -62,7 +62,6 @@ for i in range(len(seq2)):
     end_index = start_index + length -1
 
     #transformar a la hebra negativa
-
     cord1 = int(reverse_strand(bound, start_index))
     cord2 = int(reverse_strand(bound, end_index))
     chr_start = min(cord1, cord2)
