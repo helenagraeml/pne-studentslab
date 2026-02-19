@@ -53,6 +53,7 @@ f = Path(file).read_text()
 header1, seq1 =  read_cromosome20(f)
 bound =  max_boundary(header1)
 header2, seq2 = read_exons(e)
+
 print( "Exont\tLong\tStart\tEnd")
 for i in range(len(seq2)):
     seq = seq2[i]
