@@ -31,6 +31,11 @@ def seq_count(seq):
         if i in base:
             base[i] += 1
     return base
+def  seq_reverse(seq, n):
+    return seq[:n][::-1]
+
+
+
 
 
 
