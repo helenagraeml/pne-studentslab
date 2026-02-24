@@ -15,7 +15,7 @@ class Seq:
     def __str__(self):
         return self.bases
 
-    def __len__(self):
+    def  lenth(self):
         return len(self.bases)
 
 def generate_seqs(pattern, number):
@@ -25,8 +25,10 @@ def generate_seqs(pattern, number):
         lst.append(new_seq)
     return lst
 def print_seqs(seq_list):
-    for index, seq in enumerate(seq_list):
-        print(f"Sequence {index}: (Length: {len(seq)}) {seq}")
+    position = 0
+    for i in seq_list:
+        print(f"sequence {position}: (Length: {i.lenth()}) {i}")
+        position += 1
 
 
 

@@ -18,8 +18,10 @@ class Seq:
         return len(self.bases)
 
 seq_list = [Seq("ACT"), Seq("GATA"), Seq("CAGATA")]
-position = 0
-for i in seq_list:
-    print(f"sequence {position}: (Length: {i.lenth()}) {i}")
-    position +=1
+
+def print_seqs(seq_list):
+    position = 0
+    for i in seq_list:
+        print(f"sequence {position}: (Length: {i.lenth()}) {i}")
+        position +=1
 
