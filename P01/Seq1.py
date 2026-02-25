@@ -1,10 +1,11 @@
+from pathlib import Path
 class Seq:
     def __init__(self, bases=None):
         valid_base = ["A", "G", "T", "C"]
         total = 0
 
         if bases is None:
-            self.bases = "NULL "
+            self.bases = "NULL"
             print("NULL sequence created!")
         else:
             for i in bases:
@@ -22,5 +23,75 @@ class Seq:
         return self.bases
 
     def  length(self):
-        return len(self.bases)
+        if self.bases == "NULL" or self.bases == "ERROR":
+            return 0
+        else:
+            return len(self.bases)
+
+    def count_base(self, base):
+        if self.bases == "NULL" or self.bases == "ERROR":
+            return 0
+        else:
+            count = 0
+            for i in self.bases:
+                if i == base:
+                   count += 1
+            return count
+
+    def count(self):
+        if self.bases == "NULL" or self.bases == "ERROR":
+            return { "A": 0 , "C":0 , "T":0 , "G":0}
+        else:
+            dic = { "A": 0 , "C":0 , "T":0 , "G":0}
+            for i in self.bases:
+                if i == "A":
+                    dic["A"] += 1
+                elif i == "C":
+                    dic["C"] += 1
+                elif i == "T":
+                    dic["T"] += 1
+                else:
+                    dic["G"] += 1
+            return dic
+    def reverse(self):
+        if self.bases == "ERROR":
+            return "ERROR"
+        elif self.bases == "NULL":
+            return "NULL"
+        else:
+            return self.bases[::-1]
+
+    def complement(self):
+        if self.bases == "ERROR":
+            return "ERROR"
+        elif self.bases == "NULL":
+            return "NULL"
+        else:
+            lst = []
+            for i in self.bases:
+                if i == "A":
+                    lst.append("T")
+                elif i == "T":
+                    lst.append("A")
+                elif i == "C":
+                    lst.append("G")
+                else:
+                    lst.append("C")
+            return "".join(lst)
+    def read_fasta(self, filename):
+        FILENAME = "S04/sequences/U5.txt"
+        filename = Path(FILENAME).read_text()
+        f = FILENAME.split(".")
+        f = f[0]
+
+
+
+
+
+
+
+
+
+
+
 
