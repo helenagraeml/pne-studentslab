@@ -78,20 +78,41 @@ class Seq:
                 else:
                     lst.append("C")
             return "".join(lst)
+
     def read_fasta(self, filename):
-        FILENAME = "S04/sequences/U5.txt"
-        filename = Path(FILENAME).read_text()
-        f = FILENAME.split(".")
-        f = f[0]
+        valid_base = {"A", "G", "T", "C"}
 
+        seq = Path(filename).read_text()
+        seq = seq.split("\n")
+        clean_seq = "".join(seq[1:]).strip()
+        valid = True
 
+        for base in clean_seq:
+            if base not in valid_base:
+                valid = False
+                break
 
+        if valid:
+            self.bases = clean_seq
+        else:
+            self.bases = "ERROR"
 
+        return self.bases
 
+    def most_frequent_seq(self):
+        if self.bases == "NULL" or self.bases == "ERROR":
+            return None
 
+        counts = self.count()
+        max_base = None
+        max_value = -1
 
+        for base in counts:
+            if counts[base] > max_value:
+                max_value = counts[base]
+                max_base = base
 
-
+        return max_base
 
 
 

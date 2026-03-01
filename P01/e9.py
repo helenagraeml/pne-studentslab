@@ -1,13 +1,12 @@
 from Seq1 import Seq
 
 if __name__ == "__main__":
-    print("-----| Practice 1, Exercise 6|------")
-    s = Seq()
-    s.read_fasta(FILENAME)
+    print("-----| Practice 1, Exercise 9 |------")
 
-    for i in lst:
-        print(f"Sequence {n} : (Length: {i.length()}) {i} ")
-        print(f"{s1.count()}")
-        print(f"REV: {i.reverse()}")
-        print(f"COMP: {i.complement()}")
-        n += 1
+    s = Seq()
+    s.read_fasta("../P00/S04/sequences/U5.txt")
+
+    print(f"Sequence : (Length: {s.length()}) {s}")
+    print(f"Bases: {s.count()}")
+    print(f"Rev:   {s.reverse()}")
+    print(f"Comp:  {s.complement()}")
