@@ -18,7 +18,7 @@ if __name__ == "__main__":
         f = f[0]
         dic[f] = most_common_base(seq)
 
-    print("-----| Exercise 5 |------")
+    print("-----| Exercise 8 |------")
     for k, v in dic.items():
         print(f"Gene {k}: Most frequent Base: {v}")
 
