@@ -1,7 +1,6 @@
 from Client0 import Client
 
 if __name__ == "__main__":
-    from Client0 import Client
 
     PRACTICE = 2
     EXERCISE = 1
@@ -13,7 +12,7 @@ if __name__ == "__main__":
     port = 8080
 
     # -- Create a client object
-    c = Client(IP, PORT)
+    c = Client(ip, port)
 
     # -- Test the ping method
     c.ping()
