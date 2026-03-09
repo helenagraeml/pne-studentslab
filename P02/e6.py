@@ -26,8 +26,10 @@ if __name__ == "__main__":
 
     for i in range(10):
         fragment = sequence[i * 10: (i+1)*10]
-        print(f"Fragment {i + 1} : {fragment}")
+        message = f"Fragment {i + 1} : {fragment}"
+        print(message)
+
         if (i + 1) % 2 == 1 :
-            client1.talk(fragment)
+            client1.talk(message)
         else:
-            client2.talk(fragment)
+            client2.talk(message)
