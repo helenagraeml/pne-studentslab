@@ -7,12 +7,7 @@ if __name__ == "__main__":
 
     print(f"-----| Practice {PRACTICE}, Exercise {EXERCISE} |------")
 
-    # -- Parameters of the server to talk to
-    ip = "212.128.255.78"  # your IP address
+    ip = "127.0.0.1"
     port = 8080
-
-    # -- Create a client object
     c = Client(ip, port)
-
-    # -- Test the ping method
     c.ping()
