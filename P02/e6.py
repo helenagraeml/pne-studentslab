@@ -4,7 +4,7 @@ import socket
 
 if __name__ == "__main__":
 
-    ip = "212.128.255.78"
+    ip = "212.128.255.78" #127.0.0.1
     port1 = 8080  # Server 1
     port2 = 8081  # Server 2
 
@@ -36,6 +36,6 @@ if __name__ == "__main__":
             response = client1.talk(fragment)
         else:  # Even → server 2
             response = client2.talk(fragment)
-        # Optional: print server response
-        # print("Server response:", response)
+
+
 
