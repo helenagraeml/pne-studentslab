@@ -22,4 +22,5 @@ if __name__ == "__main__":
 
         print(f"Sending the {i} Gene to the server...")
         response = c.talk(str(s))
+        print("From server:")
         print(response)
