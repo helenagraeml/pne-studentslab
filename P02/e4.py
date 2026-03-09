@@ -20,7 +20,14 @@ if __name__ == "__main__":
         s = Seq()
         s.read_fasta(head + i + tail)
 
-        print(f"Sending the {i} Gene to the server...")
-        response = c.talk(str(s))
+        msg = f"Sending the {i} Gene to the server..."
+        print(f"To server: {msg}")
+        response = c.talk(msg)
         print("From server:")
+        print(response)
+
+        sequence = str(s)
+        print(f"To server: {sequence}")
+        response = c.talk(sequence)
+        print("From server: ")
         print(response)
