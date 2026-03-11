@@ -65,7 +65,7 @@ while True:
             print(f"{command}")
             print("New sequence created!")
 
-            l= f"sequence {seq}" + f"Total length: {total}\n" + f"A: {a} ({a / total * 100:.1f}%)\n" + f"C: {c} ({c / total * 100:.1f}%)\n" + f"G: {g} ({g / total * 100:.1f}%)\n" + f"T: {t} ({t / total * 100:.1f}%)\n)"
+            l= f"sequence {seq}" + f"Total length: {total}\n" + f"A: {a} ({a / total * 100:.1f}%)\n" + f"C: {c} ({c / total * 100:.1f}%)\n" + f"G: {g} ({g / total * 100:.1f}%)\n" + f"T: {t} ({t / total * 100:.1f}%)\n"
             print(l)
             response =l
 
