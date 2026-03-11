@@ -6,6 +6,7 @@ from Seq1 import Seq
 # echo "GET 4" | nc 127.0.0.1 8080
 # echo "PING" | nc 127.0.0.1 8080
 # echo "INFO AACCGTA" | nc 127.0.0.1 8080
+# echo "COMP AACCGTA" | nc 127.0.0.1 8080
 
 PORT = 8080
 IP = "127.0.0.1"
@@ -55,20 +56,30 @@ while True:
                 cs.close()
         elif command == "INFO":
             seq = msg[1].strip()
+            s = Seq(seq)
             total = len(seq)
 
-            a = seq.count("A")
-            c = seq.count("C")
-            g = seq.count("G")
-            t = seq.count("T")
+            a = s.count_base("A")
+            c = s.count_base("C")
+            g = s.count_base("G")
+            t = s.count_base("T")
 
             print(f"{command}")
             print("New sequence created!")
 
-            l= f"sequence {seq}" + f"Total length: {total}\n" + f"A: {a} ({a / total * 100:.1f}%)\n" + f"C: {c} ({c / total * 100:.1f}%)\n" + f"G: {g} ({g / total * 100:.1f}%)\n" + f"T: {t} ({t / total * 100:.1f}%)\n"
+            l= f"sequence {s}" + f"Total length: {total}\n" + f"A: {a} ({a / total * 100:.1f}%)\n" + f"C: {c} ({c / total * 100:.1f}%)\n" + f"G: {g} ({g / total * 100:.1f}%)\n" + f"T: {t} ({t / total * 100:.1f}%)\n"
             print(l)
             response =l
 
             cs.send(response.encode())
             cs.close()
+        elif command == "COMP":
+            seq = msg[1].strip()
+            s = Seq(seq)
+            c = s.complement()
+            print(f"{command}")
+            print("New sequence created!")
+            print(f"{c}")
+            response = c +"\n"
+
 
