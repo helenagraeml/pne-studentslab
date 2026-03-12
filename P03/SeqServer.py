@@ -7,6 +7,8 @@ from Seq1 import Seq
 # echo "PING" | nc 127.0.0.1 8080
 # echo "INFO AACCGTA" | nc 127.0.0.1 8080
 # echo "COMP AACCGTA" | nc 127.0.0.1 8080
+#echo "REV AACCGTA" | nc 127.0.0.1 8080
+# echo "GENE U5" | nc 127.0.0.1 8080
 
 PORT = 8080
 IP = "127.0.0.1"
@@ -67,7 +69,7 @@ while True:
             print(f"{command}")
             print("New sequence created!")
 
-            l= f"sequence {s}" + f"Total length: {total}\n" + f"A: {a} ({a / total * 100:.1f}%)\n" + f"C: {c} ({c / total * 100:.1f}%)\n" + f"G: {g} ({g / total * 100:.1f}%)\n" + f"T: {t} ({t / total * 100:.1f}%)\n"
+            l= f"sequence {s}\n" + f"Total length: {total}\n" + f"A: {a} ({a / total * 100:.1f}%)\n" + f"C: {c} ({c / total * 100:.1f}%)\n" + f"G: {g} ({g / total * 100:.1f}%)\n" + f"T: {t} ({t / total * 100:.1f}%)\n"
             print(l)
             response =l
 
@@ -81,5 +83,22 @@ while True:
             print("New sequence created!")
             print(f"{c}")
             response = c +"\n"
+            cs.send(response.encode())
+            cs.close()
 
+        elif command == "REV":
+            seq = msg[1].strip()
+            s = Seq(seq)
+            c = s.reverse()
+            print(f"{command}")
+            print("New sequence created!")
+            print(f"{c}")
+            response = c + "\n"
+            cs.send(response.encode())
+            cs.close()
+        elif command == "GENE":
+            seq = msg[1].strip()
+
+            s = Seq(seq)
+            s =
 
