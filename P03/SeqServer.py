@@ -18,7 +18,7 @@ ls.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 ls.bind((IP, PORT))
 ls.listen()
 print("SEQ Server configured!")
-lst = ["ACGTG", "TGTGCC", "ACTGC", "ACCG"]
+lst = ["ACGTG", "TGTGCC", "ACTGC", "ACCG", "AAAT"]
 while True:
     print("Waiting for Clients...")
 
@@ -97,8 +97,18 @@ while True:
             cs.send(response.encode())
             cs.close()
         elif command == "GENE":
-            seq = msg[1].strip()
+            gene = msg[1].strip()
 
-            s = Seq(seq)
-            s =
+            head = "../P00/S04/sequences/"
+            tail = ".txt"
+
+            print(f"{command}")
+
+            s = Seq()
+            s.read_fasta(head + gene + tail)
+            print(str(s))
+            response = str(s) + "\n"
+            cs.send(response.encode())
+            cs.close()
+
 
