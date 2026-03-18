@@ -39,7 +39,7 @@ def process_client(s):
         <meta charset="utf-8">
         <title>Green server</title>
       </head>
-      <body style="background-color: lightgreen;">
+      <body style="background-color: lightblue;">
         <h1>GREEN SERVER</h1>
         <p>I am the Green Server! :-)(MODIFIED BY ME!!!!)</p>
       </body>
