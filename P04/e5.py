@@ -37,8 +37,11 @@ if __name__ == "__main__":
         else:
             FILENAME = "../P04/html/info/error.html"
 
+
         body = Path(FILENAME).read_text()
         status_line = "HTTP/1.1 200 OK\r\n"
+
+
         header = "Content-Type: text/html\r\n"
         header += f"Content-Length: {len(body)}\r\n"
 
@@ -46,13 +49,11 @@ if __name__ == "__main__":
         s.send(response_msg.encode())
 
 
-
     ls = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     ls.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     ls.bind((IP, PORT))
     ls.listen()
 
-    print("Green server configured!")
 
     while True:
         print("Waiting for clients....")

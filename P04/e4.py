@@ -48,8 +48,6 @@ if __name__ == "__main__":
     ls.bind((IP, PORT))
     ls.listen()
 
-    print("Green server configured!")
-
     while True:
         print("Waiting for clients....")
         try:
