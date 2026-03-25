@@ -1,4 +1,3 @@
-
 from pathlib import Path
 
 FILENAME = "sequences/RNU6_269P.txt"
