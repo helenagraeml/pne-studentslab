@@ -2,7 +2,7 @@ import socket
 import termcolor
 
 PORT = 8080
-IP = "212.128.255.69"
+IP = "127.0.0.1"
 
 connections = 0
 clients = []
