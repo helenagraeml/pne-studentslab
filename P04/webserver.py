@@ -35,10 +35,10 @@ if __name__ == "__main__":
             FILENAME = "../P04/html/info/T.html"
 
         elif path == "/":
-            FILENAME = "../P04/html/info/index.html"
+            FILENAME = "../S14/index.html"
 
         else:
-            FILENAME = "../P04/html/info/error.html"
+            FILENAME = "../S14/error.html"
 
 
         body = Path(FILENAME).read_text()
