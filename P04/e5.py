@@ -22,17 +22,17 @@ if __name__ == "__main__":
         path = parts[1]
         print("Request line:", req_line)
         if path == "/info/A":
-            FILENAME = "../P04/html/info/A.html"
+            FILENAME = "html/info/A.html"
 
 
         elif path == "/info/C":
-            FILENAME = "../P04/html/info/C.html"
+            FILENAME = "html/info/C.html"
 
         elif path == "/info/G":
-            FILENAME = "../P04/html/info/G.html"
+            FILENAME = "html/info/G.html"
 
         elif path == "/info/T":
-            FILENAME = "../P04/html/info/T.html"
+            FILENAME = "html/info/T.html"
 
         else:
             FILENAME = "../S14/error.html"

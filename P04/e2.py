@@ -23,7 +23,7 @@ if __name__ == "__main__":
         print("Request line:", req_line)
         if path == "/info/A":
 
-            FILENAME = "../P04/html/info/A.html"
+            FILENAME = "html/info/A.html"
         body = Path(FILENAME).read_text()
 
         status_line = "HTTP/1.1 200 OK\r\n"
