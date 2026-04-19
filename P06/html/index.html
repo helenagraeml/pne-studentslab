@@ -10,21 +10,52 @@
     <form action="ping" method="get">
     Is the server alive?
     <input type="submit" value = "PING"/>
-
+      <hr>
     </form>
-    </form  action = "get" method = "get">
-     Get a sequence. Select the sequence number:
-      <select name="operation">
-        <option value= 0 >0</option>
-        <option value= 1> 1</option>
-        <option value= 2 >2</option>
-        <option value= 3 >3</option>
-        <option value= 4 >4</option>
+    <form action="get" method="get">
+      Get a sequence. Select the sequence number:
+      <select name="n">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
       </select>
-   <br>
-  <input type="submit"/>
+      <input type="submit" value="GET" />
+    </form>
+    <hr>
+    <form action="gene" method="get">
+       Get a gene. Select the name:
+      <select name="name">
+        <option value="U5">U5</option>
+        <option value="ADA">ADA</option>
+        <option value="FRAT1">FRAT1</option>
+        <option value="FXN">FXN</option>
+        <option value="RNU6_269P">RNU6_269P</option>
+      </select>
+      <button type="submit">GENE</button>
+    </form>
+    <hr>
+   <form action="operation" method="get">
+  Write a sequence:
+  <input type="text" name="seq" list="sequences-list" autocomplete="off" >
 
+  <datalist id="sequences-list">
+    <option value="AAGGT"></option>
+    <option value="ACACT"></option>
+    <option value="ACGACG"></option>
+    <option value="ACGTACGT"></option>
+    <option value="TGCATGCA"></option>
+  </datalist>
+     <br>
+     Select operation:
+    <input type="radio" name="op" value="info" checked> Info
+    <input type="radio" name="op" value="comp"> Comp
+    <input type="radio" name="op" value="rev"> Rev <br>
+     Perform opertation:
+    <button type="submit">OPERATE!</button>
 
-
+</form>
   </body>
 </html>
+

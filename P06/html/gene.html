@@ -1,0 +1,29 @@
+<html>
+<head>
+    <style>
+        .gene-container {
+            width: 90%;
+            height: 500px;
+            overflow-y: auto;
+            border: 1px solid dimgrey;
+            padding: 10px;
+            background-color: white;
+            font-family: 'Courier New', Courier, monospace;
+            word-break: break-all;
+            white-space: pre-wrap;
+            margin-top: 20px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>GENE: {{ context.name }}</h1>
+
+    <div class="gene-container">
+        {{ context.sequence }}
+    </div>
+
+    <br>
+    <a href="/">main page</a>
+</body>
+</html>
