@@ -8,17 +8,31 @@ ENDPOINT = "/sequence/id/"+ GEN
 PARAMETER = "?content-type=application/json"
 URL = SERVER + ENDPOINT + PARAMETER
 
-print()
-print(f"Server : {SERVER}")
-print(f"URL : {URL}")
-conn = http.client.HTTPSConnection(SERVER)
-conn.request("GET", ENDPOINT + PARAMETER)
+def gene_data():
+    conn = http.client.HTTPSConnection(SERVER)
 
-response = conn.getresponse()
-print("Response received!", response.status, response.reason)
-data = json.loads(response.read().decode())
-print(f"Gene : {data.get('id')} ")
-print(f"Description: {data.get('desc')}")
-print(f"Bases: {data.get('seq')}")
+    try:
+        conn.request("GET", ENDPOINT + PARAMETER)
+        res = conn.getresponse()
 
-#no quiero que me salga el diccionario
+        print()
+        print(f"Server: {SERVER}")
+        print(f"URL: {URL}")
+        print(f"Response received!: {res.status} {res.reason}")
+        print()
+
+        if res.status == 200:
+            data = json.loads(res.read().decode("utf-8"))
+            print(f"Gene: MIR633")
+            print(f"Description: {data.get('desc')}")
+            print(f"Sequence: {data.get('seq')}")
+        else:
+            print("An error ocurred!")
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+    conn.close()
+
+if __name__ == "__main__":
+    gene_data()

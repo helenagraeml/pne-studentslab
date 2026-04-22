@@ -8,7 +8,10 @@ genes = {"FRAT1": "ENSG00000165879" ,
          "FGFR3":"ENSG00000015081",
          "KDR":" ENSG00000128052",
          "ANK2":"ENSG00000145362"}
-print("Dictionary of genes!")
-print("There are 10 genes in de dictionary")
-for x, v in genes.items():
-    print(f"{x}:--> {v}")
+if __name__ == "__main__":
+    print("Dictionary of genes:")
+    print(f"There are {len(genes)} in the dictionary!")
+
+    for x ,y in genes.items():
+        print(f"{x}:--> {y}")
+

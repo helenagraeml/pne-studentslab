@@ -1,20 +1,32 @@
 import http.client
 import json
 
-SERVER = "rest.ensembl.org"
-ENDPOINT = "/info/ping"
-PARAMETER = "?content-type=application/json"
-URL = SERVER + ENDPOINT + PARAMETER
+SERVER = 'rest.ensembl.org'
+ENDPOINT = '/info/ping'
+PARAMS = '?content-type=application/json'
+URL = SERVER + ENDPOINT + PARAMS
 
-print()
-print(f"Server : {SERVER}")
-print(f"URL : {URL}")
 conn = http.client.HTTPSConnection(SERVER)
-conn.request("GET", ENDPOINT + PARAMETER)
 
-response = conn.getresponse()
-print(response.status, response.reason)
-data = json.loads(response.read().decode())
-if data["ping"] == 1:
-    print("ALIVE!")
+try:
+    conn.request("GET", ENDPOINT + PARAMS)
+    res = conn.getresponse()
+    data = res.read().decode("utf-8")
 
+    print()
+    print(f"Server: {SERVER}")
+    print(f"URL: {URL}")
+    print(f"Response received!: {res.status} {res.reason}")
+    print()
+
+    response = json.loads(data)
+
+    if response.get('ping') == 1:
+        print("PING OK! The database is running!")
+    else:
+        print("PING Failed!")
+
+except Exception as e:
+    print(f"An error occurred: {e}")
+
+conn.close()
