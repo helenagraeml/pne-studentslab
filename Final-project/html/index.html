@@ -7,25 +7,25 @@
     <h1 style="font-family: Arimo ">Browsing human and vertebrates genome</h1>
     <h3 style="font-family:'DejaVu Sans' "> BASIC level services</h3>
 
-    <form action="ping" method="get">
+    <form action="listSpecies" method="get">
     <p> <b> 1) List of species in the genome database </b></p>
     Limit: <input type="text" name="limit">
       <input type="submit" value="SEND" />
     </form>
 
-    <form action="ping" method="get">
+    <form action="karyotype" method="get">
     <p> <b> 2) Information about the karyotype: </b> </p>
-    Select the species: <input type="text" name="msg">
+    Select the species: <input type="text" name="species">
       <input type="submit" value="SEND" />
     </form>
 
-    <form action="ping" method="get">
+    <form action="chromosomeLength" method="get">
     <p> <b> 3) Chromosome length: </b> </p>
-    Select the species: <input type="text" name="msg">
+    Select the species: <input type="text" name="specie">
       <input type="submit" value="SEND" />
       <br>
       <br>
-    Select a chromosome: <input type="text" name="msg">
+    Select a chromosome: <input type="text" name="chromo">
       <input type="submit" value="SEND" />
     </form>
   </body>

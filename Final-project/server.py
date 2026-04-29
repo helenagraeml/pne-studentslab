@@ -7,9 +7,10 @@ from urllib.parse import parse_qs, urlparse
 import jinja2 as j
 import json
 
+from S04.find_exons import length
+
 SERVER = "rest.ensembl.org"
 PORT = 8080
-
 socketserver.TCPServer.allow_reuse_address = True
 
 class TestHandler(http.server.BaseHTTPRequestHandler):
@@ -33,7 +34,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         if path == "/" or path == "/index":
             contents = Path('html/index.html').read_text()
         elif path == "/listSpecies":
-            ENDPOINT = f"/info/"
+            ENDPOINT = f"/info/species"
             PARAMETER = "?content-type=application/json"
             URL = SERVER + ENDPOINT + PARAMETER
             conn = http.client.HTTPSConnection(SERVER)
@@ -43,34 +44,59 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             species = data["species"]
             name = ""
             if not arguments:
-                limit = "None"
+                limit = "Show all "
+                number = 0
                 for i in species:
-                    names = values["common_name"]
+                    names = i["common_name"]
                     name += "<li>" + names.capitalize() + "</li>"
+                    number += 1
             else:
                 limit = int(arguments["limit"][0])
+                number = 0
                 for i in species[:limit]:
-                    names = values["common_name"]
+                    names = i["common_name"]
                     name += "<li>" + names.capitalize() + "</li>"
+                    number += 1
 
-
-
-
-            contents = self.read_html_file("ping.html").render(context={"limit" : limit})
+            contents = self.read_html_file("list_species.html").render(context={"limit" : limit, "number": number, "name": name})
         elif path == "/karyotype":
-            contents = self.read_html_file("get.html").render(context={"species" :specie})
+            select_specie = arguments["species"][0].replace(" ", "%20")
+            ENDPOINT = f"/info/assembly/"
+            SPECIE = select_specie
+            PARAMETER = "?content-type=application/json"
+            conn = http.client.HTTPSConnection(SERVER)
+            conn.request("GET", ENDPOINT + SPECIE + PARAMETER)
+            res = conn.getresponse()
+            data = json.loads(res.read().decode("utf-8"))
+            species = data["karyotype"]
+            names =  ""
+            for i in species:
+                names += "<li>" + i+ "</li>"
+            contents = self.read_html_file("karyotype.html").render(context={"species" : names})
+
         elif path == "/chromosomeLength":
-            contents = self.read_html_file("gene.html").render(context={"species": specie,"chromo": chromosome})
+            select_specie = arguments["species"][0].replace(" ", "%20")
+            chromo = arguments["chromo"][0]
+            ENDPOINT = f"/info/assembly/"
+            SPECIE = select_specie
+            PARAMETER = "?content-type=application/json"
+            conn = http.client.HTTPSConnection(SERVER)
+            conn.request("GET", ENDPOINT + SPECIE + PARAMETER)
+            res = conn.getresponse()
+            data = json.loads(res.read().decode("utf-8"))
+            species = data["top_level_region"]
+            length = data[]
+            contents = self.read_html_file("chromosome_length.html").render(context={"length": length})
 
 
         else:
 
             contents = Path("html/error.html").read_text()
-            self.send_response(200)
-            self.send_header('Content-Type', 'text/html')
-            self.send_header('Content-Length', len(str.encode(contents)))
-            self.end_headers()
-            self.wfile.write(str.encode(contents))
+        self.send_response(200)
+        self.send_header('Content-Type', 'text/html')
+        self.send_header('Content-Length', len(str.encode(contents)))
+        self.end_headers()
+        self.wfile.write(str.encode(contents))
 
         return
 

@@ -1,7 +1,9 @@
-<html>
-    <body>
-        <h1>Sequence number {{ context.seqnumber }}</h1>
-             <p> {{ context.sequence }}</p>
+<html >
+    <body style="background-color: powderblue;">
+        <p>The total number of species in the esembl is : {{context.number}}</p>
+        <p>The limit you have selected is : {{context.limit}}</p>
+        <p>The names of the species are: </p>
+        {{context.name}}
         <a href="/">main page</a>
     </body>
 </html>
