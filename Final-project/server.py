@@ -7,7 +7,6 @@ from urllib.parse import parse_qs, urlparse
 import jinja2 as j
 import json
 
-from S04.find_exons import length
 
 SERVER = "rest.ensembl.org"
 PORT = 8080
@@ -76,7 +75,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
         elif path == "/chromosomeLength":
             select_specie = arguments["species"][0].replace(" ", "%20")
-            chromo = arguments["chromo"][0]
+            select_chromo = arguments["chromo"][0]
             ENDPOINT = f"/info/assembly/"
             SPECIE = select_specie
             PARAMETER = "?content-type=application/json"
@@ -85,7 +84,13 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             res = conn.getresponse()
             data = json.loads(res.read().decode("utf-8"))
             species = data["top_level_region"]
-            length = data[]
+            length = None
+            for i in species:
+                if i["name"] == select_chromo:
+                    length = i["length"]
+
+            print(select_chromo)
+            print(length)
             contents = self.read_html_file("chromosome_length.html").render(context={"length": length})
 
 
