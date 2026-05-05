@@ -130,9 +130,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             data = json.loads(res.read().decode("utf-8"))
             start = data["start"]
             end = data["end"]
-            leght = end -start
-            contents = self.read_html_file("geneseq.html").render(context={"start": start, "gene": })
-
+            lenght = end - start
+            contents = self.read_html_file("geneseq.html").render(context={"start": start, "end" : end, "length" : lenght, "gene": gene, "id": id })
 
 
 
