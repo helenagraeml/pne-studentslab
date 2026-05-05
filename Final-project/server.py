@@ -7,7 +7,6 @@ from urllib.parse import parse_qs, urlparse
 import jinja2 as j
 import json
 
-
 SERVER = "rest.ensembl.org"
 PORT = 8080
 socketserver.TCPServer.allow_reuse_address = True
@@ -24,11 +23,24 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         seq = "".join(seq)
         return seq
 
+    def from_gen_to_id(self, gene):
+        ENDPOINT = f"/lookup/symbol/human/"
+        GEN = gene
+        PARAMETER = "?content-type=application/json"
+        conn = http.client.HTTPSConnection(SERVER)
+        conn.request("GET", ENDPOINT + GEN + PARAMETER)
+        res = conn.getresponse()
+        data = json.loads(res.read().decode("utf-8"))
+        id = data["id"]
+        return id
+
     def do_GET(self):
         termcolor.cprint(self.requestline, 'green')
         url_path = urlparse(self.path)
         path = url_path.path
         arguments = parse_qs(url_path.query)
+
+
 
         if path == "/" or path == "/index":
             contents = Path('html/index.html').read_text()
@@ -88,10 +100,41 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             for i in species:
                 if i["name"] == select_chromo:
                     length = i["length"]
-
-            print(select_chromo)
-            print(length)
             contents = self.read_html_file("chromosome_length.html").render(context={"length": length})
+        elif path == "/geneLookup":
+            gene = arguments["gene"][0].replace(" ", "%20").upper()
+            id = self.from_gen_to_id(gene)
+            contents = self.read_html_file("geneLookup.html").render(context={"id": id, "gene": gene})
+
+        elif path == "/geneSeq":
+            gene = arguments["gene"][0].replace(" ", "%20").upper()
+            id = self.from_gen_to_id(gene)
+            ENDPOINT = f"/sequence/id/"
+            SPECIE = id
+            PARAMETER = "?content-type=application/json"
+            conn = http.client.HTTPSConnection(SERVER)
+            conn.request("GET", ENDPOINT + SPECIE + PARAMETER)
+            res = conn.getresponse()
+            data = json.loads(res.read().decode("utf-8"))
+            seq = data['seq']
+            contents = self.read_html_file("geneseq.html").render(context={"seq": seq, "gene": gene})
+        elif path == "/geneInfo":
+            gene = arguments["gene"][0].replace(" ", "%20").upper()
+            id = self.from_gen_to_id(gene)
+            ENDPOINT = f"/lookup/id/"
+            SPECIE = id
+            PARAMETER = "?content-type=application/json"
+            conn = http.client.HTTPSConnection(SERVER)
+            conn.request("GET", ENDPOINT + SPECIE + PARAMETER)
+            res = conn.getresponse()
+            data = json.loads(res.read().decode("utf-8"))
+            start = data["start"]
+            end = data["end"]
+            leght = end -start
+            contents = self.read_html_file("geneseq.html").render(context={"start": start, "gene": })
+
+
+
 
 
         else:
