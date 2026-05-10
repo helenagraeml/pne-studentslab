@@ -40,14 +40,11 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         path = url_path.path
         arguments = parse_qs(url_path.query)
 
-
-
         if path == "/" or path == "/index":
             contents = Path('html/index.html').read_text()
         elif path == "/listSpecies":
             ENDPOINT = f"/info/species"
             PARAMETER = "?content-type=application/json"
-            URL = SERVER + ENDPOINT + PARAMETER
             conn = http.client.HTTPSConnection(SERVER)
             conn.request("GET", ENDPOINT + PARAMETER)
             res = conn.getresponse()
