@@ -2,7 +2,7 @@ import http.server
 import http.client
 import socketserver
 import termcolor
-from pathlib import Path
+from Seq1 import *
 from urllib.parse import parse_qs, urlparse
 import jinja2 as j
 import json
@@ -107,13 +107,13 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             gene = arguments["gene"][0].replace(" ", "%20").upper()
             id = self.from_gen_to_id(gene)
             ENDPOINT = f"/sequence/id/"
-            SPECIE = id
+            GENE = id
             PARAMETER = "?content-type=application/json"
             conn = http.client.HTTPSConnection(SERVER)
-            conn.request("GET", ENDPOINT + SPECIE + PARAMETER)
+            conn.request("GET", ENDPOINT + GENE + PARAMETER)
             res = conn.getresponse()
             data = json.loads(res.read().decode("utf-8"))
-            seq = data['seq']
+            seq = data['seq'].strip()
             contents = self.read_html_file("geneseq.html").render(context={"seq": seq, "gene": gene})
         elif path == "/geneInfo":
             gene = arguments["gene"][0].replace(" ", "%20").upper()
@@ -125,17 +125,53 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             conn.request("GET", ENDPOINT + SPECIE + PARAMETER)
             res = conn.getresponse()
             data = json.loads(res.read().decode("utf-8"))
-            start = data["start"]
-            end = data["end"]
-            lenght = end - start
-            contents = self.read_html_file("geneseq.html").render(context={"start": start, "end" : end, "length" : lenght, "gene": gene, "id": id })
+            start = int(data["start"])
+            end = int(data["end"])
+            length = end - start + 1
+            contents = self.read_html_file("geneinfo.html").render(context={"start": start, "end" : end, "length" : length, "gene": gene, "id": id })
+        elif path == "/geneCalc":
+            gene = arguments["gene"][0].replace(" ", "%20").upper()
+            id = self.from_gen_to_id(gene)
+            ENDPOINT = f"/sequence/id/"
+            GEN = id
+            PARAMETER = "?content-type=application/json"
+            conn = http.client.HTTPSConnection(SERVER)
+            conn.request("GET", ENDPOINT + GEN + PARAMETER)
+            res = conn.getresponse()
+            data = json.loads(res.read().decode("utf-8"))
+            seq = data['seq'].strip()
+            seq_obj = Seq(seq)
+            length = seq_obj.length()
+            percentage = seq_obj.percentage()
+            contents = self.read_html_file("geneCalc.html").render(context={"gene": gene, "length": length, "percentage": percentage})
 
-
+        elif path == "/geneList":
+            chromo = arguments["chromo"][0]
+            start = arguments["start"][0]
+            end = arguments["end"][0]
+            ENDPOINT = f"/overlap/region/human/"
+            C = chromo
+            START = start
+            END = end
+            PARAMETER = "?feature=gene;feature=transcript;feature=cds;feature=exon;content-type=application/json"
+            conn = http.client.HTTPSConnection(SERVER)
+            conn.request("GET", ENDPOINT + C + ":" + START + "-"+ END + PARAMETER)
+            res = conn.getresponse()
+            data = json.loads(res.read().decode("utf-8"))
+            genes = []
+            for i in data:
+                if i.get("external_name"):
+                    genes.append(i["external_name"])
+            genes = list(set(genes))
+            gene_list = ""
+            for i in genes:
+                gene_list += "<li>" + i+ "</li>"
+                contents = self.read_html_file("geneList.html").render(context={"gene_list": gene_list})
 
 
         else:
-
             contents = Path("html/error.html").read_text()
+
         self.send_response(200)
         self.send_header('Content-Type', 'text/html')
         self.send_header('Content-Length', len(str.encode(contents)))

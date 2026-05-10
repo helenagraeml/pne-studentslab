@@ -7,37 +7,66 @@
     <h1 style="font-family: Arimo ">Browsing human and vertebrates genome</h1>
     <h3 style="font-family:'DejaVu Sans' "> BASIC level services</h3>
 
-    <form action="listSpecies" method="get">
+    <form action="/listSpecies" method="get">
     <p> <b> 1) List of species in the genome database </b></p>
     Limit: <input type="text" name="limit">
       <input type="submit" value="SEND" />
     </form>
 
-    <form action="karyotype" method="get">
+    <form action="/karyotype" method="get">
     <p> <b> 2) Information about the karyotype: </b> </p>
     Select the species: <input type="text" name="species">
       <input type="submit" value="SEND" />
     </form>
 
-    <form action="chromosomeLength" method="get">
+    <form action="/chromosomeLength" method="get">
     <p> <b> 3) Chromosome length: </b> </p>
-    Select the species: <input type="text" name="species">
-      <input type="submit" value="SEND" />
-      <br>
-      <br>
-    Select a chromosome: <input type="text" name="chromo">
+    Select the species:
+      <input type="text" name="species">
+      <br><br>
+    Select a chromosome:
+      <input type="text" name="chromo">
+      <br><br>
       <input type="submit" value="SEND" />
     </form>
-    <form action="geneLookup" method="get">
+    <form action="/geneLookup" method="get">
       <p> <b> 4) select a human's gene to get the gene's id: </b> </p>
       Select a gene: <input type="text" name="gene">
         <input type="submit" value="SEND" />
       </form>
-    <form action="geneSeq" method="get">
+    <form action="/geneSeq" method="get">
         <p> <b> 4) select a human's gene to get the gene's id: </b> </p>
         Select a gene: <input type="text" name="gene">
           <input type="submit" value="SEND" />
         </form>
+    <form action="/geneInfo" method="get">
+        <p> <b> 5) select a human's gene to get the gene's information: </b> </p>
+        Select a gene: <input type="text" name="gene">
+          <input type="submit" value="SEND" />
+        </form>
+    <form action="/geneCalc" method="get">
+        <p> <b> 5) select a human's gene to get the gene's length and percentage of bases: </b> </p>
+        Select a gene: <input type="text" name="gene">
+          <input type="submit" value="SEND" />
+        </form>
+    <form action="/geneList" method="get">
+    <b> 6) human genes that overlap a region: </b>
+      <br><br>
+    Select the chromosome:
+    <input type="text" name="chromo">
+    <br><br>
+
+    Select a starting point:
+    <input type="text" name="start">
+    <br><br>
+
+    Select an ending point:
+    <input type="text" name="end">
+    <br><br>
+
+    <input type="submit" value="SEND">
+
+</form>
 
   </body>
 </html>
