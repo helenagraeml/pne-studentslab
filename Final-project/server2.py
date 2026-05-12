@@ -39,7 +39,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         url_path = urlparse(self.path)
         path = url_path.path
         arguments = parse_qs(url_path.query)
+        is_json = arguments.get("json", ["0"])[0] == "1"
+        response_data = {}
         contents = ""
+        status_code = 200
         try:
             if path == "/" or path == "/index":
                 contents = Path('html/index.html').read_text()
@@ -85,7 +88,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
             elif path == "/chromosomeLength":
                 select_specie = arguments["species"][0].replace(" ", "%20")
-                select_chromo = arguments["chromo"][0].upper()
+                select_chromo = arguments["chromo"][0]
                 ENDPOINT = f"/info/assembly/"
                 SPECIE = select_specie
                 PARAMETER = "?content-type=application/json"
@@ -168,10 +171,26 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 for i in genes:
                     gene_list += "<li>" + i+ "</li>"
                     contents = self.read_html_file("geneList.html").render(context={"gene_list": gene_list})
-                else:
-                    contents = Path("html/error.html").read_text()
-        except:
-            contents = Path("html/error.html").read_text()
+
+
+            else:
+                contents = Path("html/error.html").read_text()
+        except Exception as e:
+            status_code = 500
+            response_data = {"error": str(e)}
+            contents = "Internal Server Error"
+            self.send_response(status_code)
+
+            if is_json:
+                self.send_header('Content-Type', 'application/json')
+                body = json.dumps(response_data).encode("utf-8")
+            else:
+                self.send_header('Content-Type', 'text/html')
+                body = str.encode(contents)
+
+            self.send_header('Content-Length', len(body))
+            self.end_headers()
+            self.wfile.write(body)
 
         self.send_response(200)
         self.send_header('Content-Type', 'text/html')
