@@ -6,6 +6,7 @@ from Seq1 import *
 from urllib.parse import parse_qs, urlparse
 import jinja2 as j
 import json
+from pathlib import Path
 
 SERVER = "rest.ensembl.org"
 PORT = 8080
@@ -39,10 +40,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         url_path = urlparse(self.path)
         path = url_path.path
         arguments = parse_qs(url_path.query)
-        contents = ""
         try:
             if path == "/" or path == "/index":
-                contents = Path('html/index.html').read_text()
+               contents = Path('html/index.html').read_text()
+
             elif path == "/listSpecies":
                 ENDPOINT = f"/info/species"
                 PARAMETER = "?content-type=application/json"
@@ -51,23 +52,29 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 res = conn.getresponse()
                 data = json.loads(res.read().decode("utf-8"))
                 species = data["species"]
-                name = ""
-                if not arguments:
-                    limit = "Show all "
-                    number = 0
-                    for i in species:
-                        names = i["common_name"]
-                        name += "<li>" + names.capitalize() + "</li>"
-                        number += 1
+                species_names = set()
+                for i in species:
+
+                    if i.get("display_name"):
+                        species_names.add(i["display_name"])
+
+                species_names = sorted(species_names)
+
+                if "limit" not in arguments:
+                    limit = "Show all"
+                    selected_species = species_names
+
                 else:
                     limit = int(arguments["limit"][0])
-                    number = 0
-                    for i in species[:limit]:
-                        names = i["common_name"]
-                        name += "<li>" + names.capitalize() + "</li>"
-                        number += 1
+                    selected_species = species_names[:limit]
 
+
+                name = ""
+                for sp in selected_species:
+                    name += f"<li>{sp}</li>"
+                number = len(selected_species)
                 contents = self.read_html_file("list_species.html").render(context={"limit" : limit, "number": number, "name": name})
+
             elif path == "/karyotype":
                 select_specie = arguments["species"][0].replace(" ", "%20")
                 ENDPOINT = f"/info/assembly/"
@@ -77,10 +84,14 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 conn.request("GET", ENDPOINT + SPECIE + PARAMETER)
                 res = conn.getresponse()
                 data = json.loads(res.read().decode("utf-8"))
-                species = data["karyotype"]
-                names =  ""
-                for i in species:
-                    names += "<li>" + i+ "</li>"
+                karyotype = data.get("karyotype", [])
+
+                names = ""
+                if karyotype:
+                    for chrom in karyotype:
+                        names += f"<li>{chrom}</li>"
+                else:
+                    names = "<li>No karyotype information available</li>"
                 contents = self.read_html_file("karyotype.html").render(context={"species" : names})
 
             elif path == "/chromosomeLength":
@@ -168,8 +179,6 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 for i in genes:
                     gene_list += "<li>" + i+ "</li>"
                     contents = self.read_html_file("geneList.html").render(context={"gene_list": gene_list})
-                else:
-                    contents = Path("html/error.html").read_text()
         except:
             contents = Path("html/error.html").read_text()
 

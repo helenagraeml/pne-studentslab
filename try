@@ -1,0 +1,8 @@
+1) http://localhost:8080/ listSpecies? limit=10
+2) http://localhost:8080/ karyotype? species=human
+3) http://localhost:8080/ chromosomeLength? species=human & chromo=X
+4) http://localhost:8080/ geneLookup? gene=FRAT1
+5) http://localhost:8080/ geneSeq? gene=FRAT1
+6) http://localhost:8080/ geneInfo? gene=FRAT1
+7) http://localhost:8080/ geneCalc? gene=FRAT1
+8) http://localhost:8080/ geneList? chromo=9 &start=22125500 &end=22136000
