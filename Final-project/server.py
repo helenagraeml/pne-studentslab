@@ -178,7 +178,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 gene_list = ""
                 for i in genes:
                     gene_list += "<li>" + i+ "</li>"
-                    contents = self.read_html_file("geneList.html").render(context={"gene_list": gene_list})
+                    contents = self.read_html_file("geneList.html").render(context={"gene_list": gene_list, "chromo": chromo })
         except:
             contents = Path("html/error.html").read_text()
 
