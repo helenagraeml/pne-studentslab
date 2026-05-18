@@ -40,7 +40,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         url_path = urlparse(self.path)
         path = url_path.path
         arguments = parse_qs(url_path.query)
-        is_json = "json" in arguments
+        is_json = arguments.get("json", ["0"])[0] == "1"
 
         try:
             if path == "/" or path == "/index":
