@@ -4,7 +4,6 @@ if __name__ == "__main__":
     IP = "127.0.0.1"
     PORT = 8080
 
-
     def process_client(s):
         req_raw = s.recv(2000)
         req = req_raw.decode()

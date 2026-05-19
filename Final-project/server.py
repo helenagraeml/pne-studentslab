@@ -40,9 +40,14 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         url_path = urlparse(self.path)
         path = url_path.path
         arguments = parse_qs(url_path.query)
+        is_json = arguments.get("json", ["0"])[0] == "1"
+
         try:
             if path == "/" or path == "/index":
-               contents = Path('html/index.html').read_text()
+                if is_json:
+                    contents = json.dumps({"message": "Welcome to the Ensembl API Server"})
+                else:
+                    contents = Path('html/index.html').read_text()
 
             elif path == "/listSpecies":
                 ENDPOINT = f"/info/species"
@@ -68,12 +73,14 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     limit = int(arguments["limit"][0])
                     selected_species = species_names[:limit]
 
-
-                name = ""
-                for sp in selected_species:
-                    name += f"<li>{sp}</li>"
-                number = len(selected_species)
-                contents = self.read_html_file("list_species.html").render(context={"limit" : limit, "number": number, "name": name})
+                if is_json:
+                    contents = json.dumps({"limit": limit, "species": selected_species})
+                else:
+                    name = ""
+                    for sp in selected_species:
+                        name += f"<li>{sp}</li>"
+                    number = len(selected_species)
+                    contents = self.read_html_file("list_species.html").render(context={"limit": limit, "number": number, "name": name})
 
             elif path == "/karyotype":
                 select_specie = arguments["species"][0].replace(" ", "%20")
@@ -86,14 +93,16 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 data = json.loads(res.read().decode("utf-8"))
                 karyotype = data.get("karyotype", [])
 
-                names = ""
-                if karyotype:
-                    for chrom in karyotype:
-                        names += f"<li>{chrom}</li>"
+                if is_json:
+                    contents = json.dumps({"species": select_specie, "karyotype": karyotype})
                 else:
-                    names = "<li>No karyotype information available</li>"
-                contents = self.read_html_file("karyotype.html").render(context={"species" : names})
-
+                    names = ""
+                    if karyotype:
+                        for chrom in karyotype:
+                            names += f"<li>{chrom}</li>"
+                    else:
+                        names = "<li>No karyotype information available</li>"
+                    contents = self.read_html_file("karyotype.html").render(context={"species": names})
             elif path == "/chromosomeLength":
                 select_specie = arguments["species"][0].replace(" ", "%20")
                 select_chromo = arguments["chromo"][0].upper()
@@ -109,11 +118,18 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 for i in species:
                     if i["name"] == select_chromo:
                         length = i["length"]
-                contents = self.read_html_file("chromosome_length.html").render(context={"length": length})
+                if is_json:
+                    contents = json.dumps({"length": length})
+                else:
+                    contents = self.read_html_file("chromosome_length.html").render(context={"length": length})
+
             elif path == "/geneLookup":
                 gene = arguments["gene"][0].replace(" ", "%20").upper()
                 id = self.from_gen_to_id(gene)
-                contents = self.read_html_file("geneLookup.html").render(context={"id": id, "gene": gene})
+                if is_json:
+                    contents = json.dumps({"id": id, "gene": gene})
+                else:
+                    contents = self.read_html_file("geneLookup.html").render(context={"id": id, "gene": gene})
 
             elif path == "/geneSeq":
                 gene = arguments["gene"][0].replace(" ", "%20").upper()
@@ -126,7 +142,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 res = conn.getresponse()
                 data = json.loads(res.read().decode("utf-8"))
                 seq = data['seq'].strip()
-                contents = self.read_html_file("geneseq.html").render(context={"seq": seq, "gene": gene})
+                if is_json:
+                    contents = json.dumps({"seq": seq})
+                else:
+                    contents = self.read_html_file("geneseq.html").render(context={"seq": seq, "gene": gene})
             elif path == "/geneInfo":
                 gene = arguments["gene"][0].replace(" ", "%20").upper()
                 id = self.from_gen_to_id(gene)
@@ -140,7 +159,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 start = int(data["start"])
                 end = int(data["end"])
                 length = end - start + 1
-                contents = self.read_html_file("geneinfo.html").render(context={"start": start, "end" : end, "length" : length, "gene": gene, "id": id })
+                if is_json:
+                    contents = json.dumps({"start": start, "end": end, "length": length})
+                else:
+                    contents = self.read_html_file("geneinfo.html").render(context={"start": start, "end" : end, "length" : length, "gene": gene, "id": id })
             elif path == "/geneCalc":
                 gene = arguments["gene"][0].replace(" ", "%20").upper()
                 id = self.from_gen_to_id(gene)
@@ -155,7 +177,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 seq_obj = Seq(seq)
                 length = seq_obj.length()
                 percentage = seq_obj.percentage()
-                contents = self.read_html_file("geneCalc.html").render(context={"gene": gene, "length": length, "percentage": percentage})
+                if is_json:
+                    contents = json.dumps({"seq": seq, "length": length, "percentage": percentage})
+                else:
+                    contents = self.read_html_file("geneCalc.html").render(context={"gene": gene, "length": length, "percentage": percentage})
 
             elif path == "/geneList":
                 chromo = arguments["chromo"][0]
@@ -175,35 +200,28 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     if i.get("external_name"):
                         genes.append(i["external_name"])
                 genes = list(set(genes))
-                gene_list = ""
-                for i in genes:
-                    gene_list += "<li>" + i+ "</li>"
-                    contents = self.read_html_file("geneList.html").render(context={"gene_list": gene_list, "chromo": chromo })
-        except:
-            contents = Path("html/error.html").read_text()
+                if is_json:
+                    contents = json.dumps({"genes": genes})
+                else:
+                    gene_list = ""
+                    for i in genes:
+                        gene_list += "<li>" + i+ "</li>"
+                        contents = self.read_html_file("geneList.html").render(context={"gene_list": gene_list})
+
+        except Exception as e:
+            contents = json.dumps({"error": str(e)}) if is_json else Path("html/error.html").read_text()
 
         self.send_response(200)
-        self.send_header('Content-Type', 'text/html')
+        self.send_header('Content-Type', 'application/json' if is_json else 'text/html')
         self.send_header('Content-Length', len(str.encode(contents)))
         self.end_headers()
         self.wfile.write(str.encode(contents))
 
-        return
-
 
 Handler = TestHandler
-
 with socketserver.TCPServer(("", PORT), Handler) as httpd:
-    print("Serving at PORT", PORT)
-
+    print(f"Serving at PORT {PORT}")
     try:
-
         httpd.serve_forever()
-
     except KeyboardInterrupt:
-
-        print("")
-
-        print("Stopped by the user")
-
         httpd.server_close()

@@ -17,3 +17,4 @@ if __name__ == "__main__":
         print(f"Gene : {key}")
         for k, v in value.items():
             print(f"   {k} : {v}")
+

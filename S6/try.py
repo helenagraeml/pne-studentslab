@@ -16,8 +16,6 @@ class Seq: #class Animal, class person....
 
 
 class Gene(Seq):
-
-
     def __init__(self, strbases, name=""):
         # -- Call first the Seq initializer and then the
         # -- Gene init method
@@ -28,8 +26,6 @@ class Gene(Seq):
     def __str__(self):
         """Print the Gene name along with the sequence"""
         return self.name + "-" + self.strbases
-
-
 
 # Main program
 # Create an object of the class Seq
